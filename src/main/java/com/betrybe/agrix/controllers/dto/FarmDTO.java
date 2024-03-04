@@ -1,4 +1,4 @@
-package com.betrybe.agrix.services.dto;
+package com.betrybe.agrix.controllers.dto;
 
 import com.betrybe.agrix.models.entities.Farm;
 
