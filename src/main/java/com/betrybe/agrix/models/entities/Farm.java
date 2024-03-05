@@ -15,6 +15,10 @@ public class Farm {
 
   private Double size;
 
+  public Farm() {
+
+  }
+
   public Farm(String name, Double size) {
     this.name = name;
     this.size = size;
