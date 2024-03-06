@@ -5,10 +5,12 @@ import com.betrybe.agrix.controllers.dto.ResponseDTO;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +36,16 @@ public class FarmController {
   public ResponseEntity<List<Farm>> getAllFarms() {
     List<Farm> allFarms = farmService.findAllFarm();
     return ResponseEntity.ok().body(allFarms);
+  }
+
+  @GetMapping("/{id}")
+  public ResponseEntity<Farm> getFarmById(@PathVariable Long id) {
+    Optional<Farm> optionalFarm = farmService.findFarmById(id);
+
+    if (optionalFarm.isEmpty()) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fazenda não encontrada!")
+    }
+
+
   }
 }
