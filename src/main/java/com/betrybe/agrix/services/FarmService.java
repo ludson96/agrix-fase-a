@@ -1,10 +1,12 @@
 package com.betrybe.agrix.services;
 
+import com.betrybe.agrix.error.CustomError;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.models.repositories.FarmRepository;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,8 +22,16 @@ public class FarmService {
     return farmRepository.save(farm);
   }
 
-  public Optional<Farm> findFarmById(Long id) {
-    return farmRepository.findById(id);
+  public Farm findFarmById(Long id) throws CustomError {
+    Optional<Farm> optionalFarm = farmRepository.findById(id);
+
+    if (optionalFarm.isEmpty()) {
+      throw new CustomError(
+          "Fazenda não encontrada!",
+          HttpStatus.NOT_FOUND.value()
+      );
+    }
+      return optionalFarm.get();
   }
 
   public List<Farm> findAllFarm() {
