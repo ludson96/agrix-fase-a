@@ -1,8 +1,11 @@
 package com.betrybe.agrix.controllers;
 
+import com.betrybe.agrix.controllers.dto.CropDTO;
+import com.betrybe.agrix.controllers.dto.CropDTOToEntity;
 import com.betrybe.agrix.controllers.dto.FarmDTO;
 import com.betrybe.agrix.controllers.dto.ResponseDTO;
 import com.betrybe.agrix.error.CustomError;
+import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
@@ -29,8 +32,8 @@ public class FarmController {
 
   @PostMapping
   public ResponseEntity<Farm> insertFarm(@RequestBody FarmDTO farmDTO) {
-    Farm newFarmController = farmService.insertFarm(farmDTO.dtoToEntity());
-    return ResponseEntity.status(HttpStatus.CREATED).body(newFarmController);
+    Farm newFarm = farmService.insertFarm(farmDTO.dtoToEntity());
+    return ResponseEntity.status(HttpStatus.CREATED).body(newFarm);
   }
 
   @GetMapping
@@ -45,5 +48,14 @@ public class FarmController {
     return ResponseEntity
         .ok()
         .body(optionalFarm);
+  }
+
+  @PostMapping("/{farmId}/crops")
+  public ResponseEntity<CropDTO> insertCrop(
+      @RequestBody CropDTOToEntity crop,
+      @PathVariable(name = "farmId") Long farmId
+  ) throws CustomError {
+    Crop newCrop = farmService.insertCrop(crop.dtoToEntity(), farmId);
+    return ResponseEntity.status(HttpStatus.CREATED).body(CropDTO.fromEntityToDto(newCrop));
   }
 }

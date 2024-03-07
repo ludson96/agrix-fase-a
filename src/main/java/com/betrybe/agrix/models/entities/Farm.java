@@ -1,11 +1,16 @@
 package com.betrybe.agrix.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.List;
 
 @Entity
+@Table(name = "farms")
 public class Farm {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,13 +20,18 @@ public class Farm {
 
   private Double size;
 
+  @OneToMany
+  @JsonIgnore
+  private List<Crop> crops;
+
   public Farm() {
 
   }
 
-  public Farm(String name, Double size) {
+  public Farm(String name, Double size, List<Crop> crops) {
     this.name = name;
     this.size = size;
+    this.crops = crops;
   }
 
   public Long getId() {
@@ -42,5 +52,13 @@ public class Farm {
 
   public void setSize(Double size) {
     this.size = size;
+  }
+
+  public List<Crop> getCrops() {
+    return crops;
+  }
+
+  public void setCrops(List<Crop> crops) {
+    this.crops = crops;
   }
 }
