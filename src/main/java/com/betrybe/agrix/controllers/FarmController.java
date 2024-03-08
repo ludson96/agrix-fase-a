@@ -10,6 +10,7 @@ import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,10 +53,23 @@ public class FarmController {
 
   @PostMapping("/{farmId}/crops")
   public ResponseEntity<CropDTO> insertCrop(
-      @RequestBody CropDTOToEntity crop,
-      @PathVariable(name = "farmId") Long farmId
+      @PathVariable(name = "farmId") Long farmId,
+      @RequestBody CropDTOToEntity crop
   ) throws CustomError {
-    Crop newCrop = farmService.insertCrop(crop.dtoToEntity(), farmId);
+    Crop newCrop = farmService.insertCrop(farmId, crop.dtoToEntity());
     return ResponseEntity.status(HttpStatus.CREATED).body(CropDTO.fromEntityToDto(newCrop));
+  }
+
+  @GetMapping("/{farmId}/crops")
+  public ResponseEntity<List<CropDTO>> getAllCrops(@PathVariable(name = "farmId") Long farmId)
+      throws CustomError {
+    List<Crop> allCrops = farmService.findAllCrop(farmId);
+    List<CropDTO> allCropsDto = allCrops.stream().map(crop -> new CropDTO(
+        crop.getId(),
+        crop.getName(),
+        crop.getPlantedArea(),
+        crop.getFarmId().getId()))
+        .collect(Collectors.toList());
+    return ResponseEntity.ok().body(allCropsDto);
   }
 }

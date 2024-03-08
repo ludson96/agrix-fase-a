@@ -1,5 +1,6 @@
 package com.betrybe.agrix.models.entities;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class Crop {
 
   private String name;
 
+  @Column(name = "planted_area")
   private Double plantedArea;
 
   @ManyToOne
