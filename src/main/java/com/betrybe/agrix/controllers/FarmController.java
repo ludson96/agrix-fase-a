@@ -3,13 +3,11 @@ package com.betrybe.agrix.controllers;
 import com.betrybe.agrix.controllers.dto.CropDTO;
 import com.betrybe.agrix.controllers.dto.CropDTOToEntity;
 import com.betrybe.agrix.controllers.dto.FarmDTO;
-import com.betrybe.agrix.controllers.dto.ResponseDTO;
 import com.betrybe.agrix.error.CustomError;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
 import com.betrybe.agrix.services.FarmService;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,7 +61,7 @@ public class FarmController {
   @GetMapping("/{farmId}/crops")
   public ResponseEntity<List<CropDTO>> getAllCrops(@PathVariable(name = "farmId") Long farmId)
       throws CustomError {
-    List<Crop> allCrops = farmService.findAllCrop(farmId);
+    List<Crop> allCrops = farmService.findAllCropByFarm(farmId);
     List<CropDTO> allCropsDto = allCrops.stream().map(crop -> new CropDTO(
         crop.getId(),
         crop.getName(),

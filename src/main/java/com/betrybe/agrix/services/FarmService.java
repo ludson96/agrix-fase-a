@@ -53,8 +53,12 @@ public class FarmService {
     return cropRepository.save(newCrop);
   }
 
-  public List<Crop> findAllCrop(Long farmId) throws CustomError {
+  public List<Crop> findAllCropByFarm(Long farmId) throws CustomError {
     this.findFarmById(farmId);
+    return cropRepository.findAll();
+  }
+
+  public List<Crop> findAllCrops() {
     return cropRepository.findAll();
   }
 }
