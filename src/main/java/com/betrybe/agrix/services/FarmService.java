@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service da entidade Farm.
+ */
 @Service
 public class FarmService {
   private final FarmRepository farmRepository;
@@ -23,10 +26,23 @@ public class FarmService {
     this.cropRepository = cropRepository;
   }
 
+  /**
+   * Método que inseri um novo Farm no banco de dados.
+   *
+   * @param farm dados do novo Farm a ser inserido no banco de dados.
+   * @return o novo farm.
+   */
   public Farm insertFarm(Farm farm) {
     return farmRepository.save(farm);
   }
 
+  /**
+   * Método encontrar um Farm pelo seu id.
+   *
+   * @param id a ser encontrado.
+   * @return  o Farm com o id inserido
+   * @throws CustomError retorna uma mensagem de erro caso não exista uma Farm com o id inserido.
+   */
   public Farm findFarmById(Long id) throws CustomError {
     Optional<Farm> optionalFarm = farmRepository.findById(id);
 
@@ -36,29 +52,74 @@ public class FarmService {
           HttpStatus.NOT_FOUND.value()
       );
     }
-      return optionalFarm.get();
+    return optionalFarm.get();
   }
 
   public List<Farm> findAllFarm() {
     return farmRepository.findAll();
   }
 
+  /**
+   * Inseri um novo Crop no banco de dados.
+   *
+   * @param farmId da fazenda que terá um relacionamento com crops.
+   * @param crop dados do novo Crop a ser inserido no Banco de dados.
+   * @return o novo Crop.
+   * @throws CustomError retorna uma mensagem de erro caso não exista a Farm especificada.
+   */
   public Crop insertCrop(Long farmId, Crop crop) throws CustomError {
-    Farm farm = this.findFarmById(farmId);
+    Optional<Farm> optionalFarm = farmRepository.findById(farmId);
+
+    if (optionalFarm.isEmpty()) {
+      throw new CustomError(
+          "Fazenda não encontrada!",
+          HttpStatus.NOT_FOUND.value()
+      );
+    }
+
+    Farm farm = optionalFarm.get();
 
     Crop newCrop = cropRepository.save(crop);
-    newCrop.setFarmId(farm);
+    newCrop.setFarm(farm);
     farm.getCrops().add(newCrop);
     farmRepository.save(farm);
-    return cropRepository.save(newCrop);
+    return (newCrop);
   }
 
   public List<Crop> findAllCropByFarm(Long farmId) throws CustomError {
-    this.findFarmById(farmId);
+    Optional<Farm> optionalFarm = farmRepository.findById(farmId);
+
+    if (optionalFarm.isEmpty()) {
+      throw new CustomError(
+          "Fazenda não encontrada!",
+          HttpStatus.NOT_FOUND.value()
+      );
+    }
+
     return cropRepository.findAll();
   }
 
   public List<Crop> findAllCrops() {
     return cropRepository.findAll();
+  }
+
+  /**
+   * Retorna um Crop pelo seu id.
+   *
+   * @param id desejado do Crop.
+   * @return o crop desejado
+   * @throws CustomError retorna uma exceção caso não exista a Farm solicitada.
+   */
+  public Crop getCropById(Long id) throws CustomError {
+    Optional<Crop> optionalCrop = cropRepository.findById(id);
+
+    if (optionalCrop.isEmpty()) {
+      throw new CustomError(
+          "Plantação não encontrada!",
+          HttpStatus.NOT_FOUND.value()
+      );
+    }
+
+    return optionalCrop.get();
   }
 }

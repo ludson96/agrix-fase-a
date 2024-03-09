@@ -9,6 +9,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Entidade Crops simbolizando as plantações no db.
+ */
 @Entity
 @Table(name = "crops")
 public class Crop {
@@ -23,16 +26,23 @@ public class Crop {
 
   @ManyToOne
   @JoinColumn(name = "farm_id")
-  private Farm farmId;
+  private Farm farm;
 
-  public Crop () {
+  public Crop() {
 
   }
 
-  public Crop(String name, Double plantedArea, Farm farmId) {
+  /**
+   * Construtor da entidade Crop.
+   *
+   * @param name Um String como nome da plantação.
+   * @param plantedArea Um Double como area plantada da plantação.
+   * @param farm Um Farm como id da plantação.
+   */
+  public Crop(String name, Double plantedArea, Farm farm) {
     this.name = name;
     this.plantedArea = plantedArea;
-    this.farmId = farmId;
+    this.farm = farm;
   }
 
   public Long getId() {
@@ -55,11 +65,11 @@ public class Crop {
     this.plantedArea = plantedArea;
   }
 
-  public Farm getFarmId() {
-    return farmId;
+  public Farm getFarm() {
+    return farm;
   }
 
-  public void setFarmId(Farm farmId) {
-    this.farmId = farmId;
+  public void setFarm(Farm farm) {
+    this.farm = farm;
   }
 }

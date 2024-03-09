@@ -1,8 +1,8 @@
 package com.betrybe.agrix.controllers;
 
-import com.betrybe.agrix.controllers.dto.CropDTO;
-import com.betrybe.agrix.controllers.dto.CropDTOToEntity;
-import com.betrybe.agrix.controllers.dto.FarmDTO;
+import com.betrybe.agrix.controllers.dto.CropDto;
+import com.betrybe.agrix.controllers.dto.CropDtoToEntity;
+import com.betrybe.agrix.controllers.dto.FarmDto;
 import com.betrybe.agrix.error.CustomError;
 import com.betrybe.agrix.models.entities.Crop;
 import com.betrybe.agrix.models.entities.Farm;
@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Controller da entidade Farm representando uma fazenda.
+ */
 @RestController
 @RequestMapping("/farms")
 public class FarmController {
@@ -30,8 +33,8 @@ public class FarmController {
   }
 
   @PostMapping
-  public ResponseEntity<Farm> insertFarm(@RequestBody FarmDTO farmDTO) {
-    Farm newFarm = farmService.insertFarm(farmDTO.dtoToEntity());
+  public ResponseEntity<Farm> insertFarm(@RequestBody FarmDto farmDto) {
+    Farm newFarm = farmService.insertFarm(farmDto.dtoToEntity());
     return ResponseEntity.status(HttpStatus.CREATED).body(newFarm);
   }
 
@@ -41,6 +44,13 @@ public class FarmController {
     return ResponseEntity.ok().body(allFarms);
   }
 
+  /**
+   * Retorna um Farm baseado no id especificado.
+   *
+   * @param id a ser retornado.
+   * @return status http 200 e o Farm desejado.
+   * @throws CustomError lança uma exceção caso o Farm especificado pelo id não exista.
+   */
   @GetMapping("/{id}")
   public ResponseEntity<Farm> getFarmById(@PathVariable("id") Long id) throws CustomError {
     Farm optionalFarm = farmService.findFarmById(id);
@@ -50,23 +60,30 @@ public class FarmController {
   }
 
   @PostMapping("/{farmId}/crops")
-  public ResponseEntity<CropDTO> insertCrop(
+  public ResponseEntity<CropDto> insertCrop(
       @PathVariable(name = "farmId") Long farmId,
-      @RequestBody CropDTOToEntity crop
+      @RequestBody CropDtoToEntity crop
   ) throws CustomError {
     Crop newCrop = farmService.insertCrop(farmId, crop.dtoToEntity());
-    return ResponseEntity.status(HttpStatus.CREATED).body(CropDTO.fromEntityToDto(newCrop));
+    return ResponseEntity.status(HttpStatus.CREATED).body(CropDto.fromEntityToDto(newCrop));
   }
 
+  /**
+   * Retorna todos os Crops baseado pelo id do Farm.
+   *
+   * @param farmId id do farm desejado.
+   * @return status http 200 e um List com todos os CropsDTO, retornando apenas o id de Farm.
+   * @throws CustomError lança uma exceção caso o Farm especificado pelo id não exista.
+   */
   @GetMapping("/{farmId}/crops")
-  public ResponseEntity<List<CropDTO>> getAllCrops(@PathVariable(name = "farmId") Long farmId)
+  public ResponseEntity<List<CropDto>> getAllCrops(@PathVariable(name = "farmId") Long farmId)
       throws CustomError {
     List<Crop> allCrops = farmService.findAllCropByFarm(farmId);
-    List<CropDTO> allCropsDto = allCrops.stream().map(crop -> new CropDTO(
+    List<CropDto> allCropsDto = allCrops.stream().map(crop -> new CropDto(
         crop.getId(),
         crop.getName(),
         crop.getPlantedArea(),
-        crop.getFarmId().getId()))
+        crop.getFarm().getId()))
         .collect(Collectors.toList());
     return ResponseEntity.ok().body(allCropsDto);
   }

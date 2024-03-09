@@ -1,6 +1,9 @@
 package com.betrybe.agrix.error;
 
-public class CustomError extends Exception{
+/**
+ * Exceção usada como erro de customização onde passo a mensagem e o status desejado como parâmetro.
+ */
+public class CustomError extends Exception {
 
   int status;
 
