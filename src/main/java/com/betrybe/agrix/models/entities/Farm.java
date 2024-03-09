@@ -24,7 +24,7 @@ public class Farm {
 
   private Double size;
 
-  @OneToMany(mappedBy = "farm", fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "farm")
   @JsonIgnore
   private List<Crop> crops;
 

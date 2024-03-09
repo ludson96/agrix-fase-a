@@ -52,7 +52,7 @@ public class FarmController {
    * @throws CustomError lança uma exceção caso o Farm especificado pelo id não exista.
    */
   @GetMapping("/{id}")
-  public ResponseEntity<Farm> getFarmById(@PathVariable("id") Long id) throws CustomError {
+  public ResponseEntity<Farm> getFarmById(@PathVariable(name = "id") Long id) throws CustomError {
     Farm optionalFarm = farmService.findFarmById(id);
     return ResponseEntity
         .ok()
@@ -79,12 +79,14 @@ public class FarmController {
   public ResponseEntity<List<CropDto>> getAllCrops(@PathVariable(name = "farmId") Long farmId)
       throws CustomError {
     List<Crop> allCrops = farmService.findAllCropByFarm(farmId);
-    List<CropDto> allCropsDto = allCrops.stream().map(crop -> new CropDto(
-        crop.getId(),
-        crop.getName(),
-        crop.getPlantedArea(),
-        crop.getFarm().getId()))
-        .collect(Collectors.toList());
-    return ResponseEntity.ok().body(allCropsDto);
+    return ResponseEntity.ok(
+        allCrops.stream()
+            .map(
+                crop -> new CropDto(
+                    crop.getId(),
+                    crop.getName(),
+                    crop.getPlantedArea(),
+                    crop.getFarm().getId()))
+            .collect(Collectors.toList()));
   }
 }

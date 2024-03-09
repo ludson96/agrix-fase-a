@@ -82,7 +82,7 @@ public class FarmService {
     newCrop.setFarm(farm);
     farm.getCrops().add(newCrop);
     farmRepository.save(farm);
-    return (newCrop);
+    return newCrop;
   }
 
   /**
@@ -102,7 +102,7 @@ public class FarmService {
       );
     }
 
-    return cropRepository.findAll();
+    return optionalFarm.get().getCrops();
   }
 
   public List<Crop> findAllCrops() {

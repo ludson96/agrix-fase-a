@@ -13,10 +13,6 @@ import java.util.List;
  */
 public record FarmDto(String name, Double size, List<Crop> crop) {
 
-  public static FarmDto fromEntityToDto(Farm farm) {
-    return new FarmDto(farm.getName(), farm.getSize(), farm.getCrops());
-  }
-
   public Farm dtoToEntity() {
     return new Farm(name, size, crop);
   }
