@@ -78,7 +78,6 @@ public class FarmService {
     }
 
     Farm farm = optionalFarm.get();
-
     Crop newCrop = cropRepository.save(crop);
     newCrop.setFarm(farm);
     farm.getCrops().add(newCrop);
