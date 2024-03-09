@@ -85,6 +85,13 @@ public class FarmService {
     return (newCrop);
   }
 
+  /**
+   * Retorna todas as plantações de uma fazenda em específico.
+   *
+   * @param farmId Um Long como id da fazenda desejada.
+   * @return retorna uma List de Crop como todas as plantações daquela fazenda.
+   * @throws CustomError Lança um exception caso a fazenda não exista.
+   */
   public List<Crop> findAllCropByFarm(Long farmId) throws CustomError {
     Optional<Farm> optionalFarm = farmRepository.findById(farmId);
 
