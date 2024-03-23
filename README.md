@@ -32,7 +32,7 @@ O primeiro produto dessa empresa será o Agrix, um sistema que permitirá a gest
 - Aplicar a injeção de dependência para conectar as camadas de controle, serviço e persistência.
 - Utilizar o Spring Data JPA para implementar entidades e repositórios para a persistência em banco de dados.
 - Implementar gerenciamento de erros no Spring Web.
-- Criar o Dockerfile para configurar a aplicação para execução no Docker.o
+- Criar o Dockerfile para configurar a aplicação para execução no Docker.
 
 ## Instruções para instalar e rodar
 
